@@ -87,16 +87,20 @@ def svm_loss_vectorized(W, X, y, reg):
     # to reuse some of the intermediate values that you used to compute the     #
     # loss.                                                                     #
     #############################################################################
-    mask = (values > 0) * 1
-    for i in range(num_train):
-        X_i = X[i].reshape((X.shape[1], 1))
-        dW_i = np.tile(X_i, num_classes)
-        dW_i *= mask[i]
-        dW_i[:, y[i]] = - np.sum(dW_i, axis=1)
-        dW_i[:, y[i]] += X_i.flatten()
-        dW += dW_i
-    dW /= num_train
-    dW += reg * 2 * W
+    # mask = (values > 0) * 1
+    # for i in range(num_train):
+    #     X_i = X[i].reshape((X.shape[1], 1))
+    #     dW_i = np.tile(X_i, num_classes)
+    #     dW_i *= mask[i]
+    #     dW_i[:, y[i]] = - np.sum(dW_i, axis=1)
+    #     dW_i[:, y[i]] += X_i.flatten()
+    #     dW += dW_i
+    # dW /= num_train
+    # dW += reg * 2 * W
+
+    # shape of dW is (D, C). It could be a multiplication of matrices with shapes
+    # (D, N) and (N, C). The latter could be scores; the former could be X.T.
+    # Then element (i, j) of dW will be a dot product of
     #############################################################################
     #                             END OF YOUR CODE                              #
     #############################################################################
