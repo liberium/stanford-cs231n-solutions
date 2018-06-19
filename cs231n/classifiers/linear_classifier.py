@@ -48,8 +48,7 @@ class LinearClassifier(object):
             #########################################################################
             X_batch_mask = np.random.choice(num_train, batch_size)
             X_batch = X[X_batch_mask]
-            y_batch_mask = np.random.choice(num_classes, batch_size)
-            y_batch = y[y_batch_mask]
+            y_batch = y[X_batch_mask]
             #########################################################################
             #                       END OF YOUR CODE                                #
             #########################################################################
