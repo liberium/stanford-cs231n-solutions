@@ -32,8 +32,11 @@ def softmax_loss_naive(W, X, y, reg):
     # regularization!                                                           #
     #############################################################################
     for i in num_samples:
-        for j in num_classes:
-            pass
+        scores = (X[i] @ W).T  # shape (C, 1)
+        max_score = np.max(scores)
+        normalised_correct_class_score = \
+            np.exp(scores[y[i]] - max_score) / np.sum(np.exp(scores - max_score))
+        loss = - np.log(normalised_correct_class_score)
     #############################################################################
     #                          END OF YOUR CODE                                 #
     #############################################################################
