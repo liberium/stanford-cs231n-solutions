@@ -36,7 +36,9 @@ def softmax_loss_naive(W, X, y, reg):
         max_score = np.max(scores)
         normalised_correct_class_score = \
             np.exp(scores[y[i]] - max_score) / np.sum(np.exp(scores - max_score))
-        loss = - np.log(normalised_correct_class_score)
+        loss += - np.log(normalised_correct_class_score)
+    loss /= num_samples
+    loss += np.sum(W ** 2)
     #############################################################################
     #                          END OF YOUR CODE                                 #
     #############################################################################
