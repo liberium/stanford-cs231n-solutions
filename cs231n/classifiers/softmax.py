@@ -31,7 +31,7 @@ def softmax_loss_naive(W, X, y, reg):
     # here, it is easy to run into numeric instability. Don't forget the        #
     # regularization!                                                           #
     #############################################################################
-    for i in num_samples:
+    for i in range(num_samples):
         scores = (X[i] @ W).T  # shape (C, 1)
         max_score = np.max(scores)
         normalised_correct_class_score = \
