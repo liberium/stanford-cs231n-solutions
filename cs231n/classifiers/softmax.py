@@ -1,5 +1,4 @@
 import numpy as np
-from random import shuffle
 
 
 def softmax_loss_naive(W, X, y, reg):
