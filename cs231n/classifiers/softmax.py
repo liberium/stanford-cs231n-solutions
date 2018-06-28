@@ -22,7 +22,7 @@ def softmax_loss_naive(W, X, y, reg):
     # Initialize the loss and gradient to zero.
     loss = 0.0
     dW = np.zeros_like(W)
-    num_samples = X.shape[0]
+    num_examples = X.shape[0]
     num_classes = W.shape[1]
     #############################################################################
     # TODO: Compute the softmax loss and its gradient using explicit loops.     #
@@ -30,7 +30,7 @@ def softmax_loss_naive(W, X, y, reg):
     # here, it is easy to run into numeric instability. Don't forget the        #
     # regularization!                                                           #
     #############################################################################
-    for i in range(num_samples):
+    for i in range(num_examples):
         scores = (X[i] @ W).T  # shape (C, 1)
         max_score = np.max(scores)
         normalised_correct_class_score = \
@@ -50,8 +50,8 @@ def softmax_loss_naive(W, X, y, reg):
         dW_i[:, y[i]] = - X[i] * (exp_sum - 1)
         dW_i /= exp_sum
         dW += dW_i
-    loss /= num_samples
-    dW /= num_samples
+    loss /= num_examples
+    dW /= num_examples
     loss += reg * np.sum(W ** 2)
     dW += reg * 2 * W
     #############################################################################
@@ -68,16 +68,27 @@ def softmax_loss_vectorized(W, X, y, reg):
     Inputs and outputs are the same as softmax_loss_naive.
     """
     # Initialize the loss and gradient to zero.
-    loss = 0.0
-    dW = np.zeros_like(W)
-
+    num_examples = X.shape[0]
     #############################################################################
     # TODO: Compute the softmax loss and its gradient using no explicit loops.  #
     # Store the loss in loss and the gradient in dW. If you are not careful     #
     # here, it is easy to run into numeric instability. Don't forget the        #
     # regularization!                                                           #
     #############################################################################
-    pass
+    scores = X @ W
+    correct_class_scores = scores[range(num_examples), y]
+    margins = scores - correct_class_scores.reshape((-1, 1))
+    exp_margins = np.exp(margins)
+    sum_exp_margins = np.sum(exp_margins, axis=1)
+    loss = np.sum(np.log(sum_exp_margins))
+    mtx = exp_margins
+    mtx[range(num_examples), y] = - (sum_exp_margins - 1)
+    mtx /= sum_exp_margins.reshape((-1, 1))
+    dW = X.T @ mtx
+    loss /= num_examples
+    dW /= num_examples
+    loss += reg * np.sum(W ** 2)
+    dW += reg * 2 * W
     #############################################################################
     #                          END OF YOUR CODE                                 #
     #############################################################################
